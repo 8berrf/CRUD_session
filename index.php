@@ -3,7 +3,7 @@ require ('koneksi.php');
 session_start();
 if (isset($_POST['submit'])) {
 	$email = $_POST['txt_email'];
-	$pass = $_POST['txt_pass'];
+	$pass = md5($_POST['txt_pass']);
 	if (!empty(trim($email)) && !empty(trim($pass))) {
 		$query = "SELECT * FROM user_detail WHERE user_email = '$email'";
 		$result = mysqli_query($koneksi, $query);

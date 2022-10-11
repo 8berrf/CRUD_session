@@ -8,11 +8,7 @@ $sesLvl = $_SESSION['level'];
 if (!$sesEmail) {
     header('location:../index.php');
 }
-if ($sesLvl==1) {
-    $dis = "";
-}else{
-    $dis = "disabled";
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,10 +31,10 @@ if ($sesLvl==1) {
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="POST">
             <div class="input-group">
-                <!-- <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" /> -->
-                <!-- <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button> -->
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" id="search" name="search" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
             </div>
         </form>
         <!-- Navbar-->
@@ -73,6 +69,7 @@ if ($sesLvl==1) {
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Home</h1>
+                    <h3 class="mt-4">Selamat Datang <?=$sesName?></h3>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -96,10 +93,16 @@ if ($sesLvl==1) {
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
-                                <?php 
+                                <?php
+                                // $search = $_POST['search']; 
                                 $query = "SELECT * FROM user_detail";
                                 $result = mysqli_query($koneksi, $query);
                                 $no = 1;
+                                if ($sesLvl==1) {
+                                    $dis = "";
+                                }else{
+                                    $dis = "disabled";
+                                }
                                 while ($row = mysqli_fetch_array($result)) {
                                     $userMail = $row['user_email'];
                                     $userName = $row['user_fullname'];
@@ -109,9 +112,9 @@ if ($sesLvl==1) {
                                             <td><?php echo $no; ?></td>
                                             <td><?php echo $userMail; ?></td>
                                             <td><?php echo $userName; ?></td>
-                                            <td><a href='#editlogin' data-bs-target='#editlogin<?=$row['id'];?>' class='btn btn-success btn-small' id='<?=$row['id'];?>' data-bs-toggle='modal' data-id="<?=$row['id'];?>">Edit</a>
+                                            <td><a href='#editlogin' data-bs-target='#editlogin<?=$row['id'];?>' id='<?=$row['id'];?>' data-bs-toggle='modal' data-id="<?=$row['id'];?>"><input class='btn btn-success btn-small'  type="button" value="Edit" <?=$dis;?>></a>
 
-                                                <a class="btn btn-danger btn-xs" href="../delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin..?')">Delete</a>
+                                                <a href="../delete.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin..?')"><input  class="btn btn-danger btn-xs"  type="button" value="Delete" <?=$dis;?>></a>
                                             </td>
                                         </tr>
                                         <div class="modal" id="editlogin<?=$row['id'];?>">
